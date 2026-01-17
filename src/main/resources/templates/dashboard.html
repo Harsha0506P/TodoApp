@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="dashboard-bg">
+
+    <aside class="sidebar">
+        <h2 class="logo">Task<span>Flow</span></h2>
+        <ul>
+            <li class="active"><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/dashboard/today">Today</a></li>
+            <li><a href="/dashboard/upcoming">Upcoming</a></li>
+            <li><a href="/dashboard/completed">Completed</a></li>
+        </ul>
+    </aside>
+
+    <main class="main">
+
+        <div class="top-bar">
+            <h2>Hello</h2>
+            <a href="/logout" class="logout-btn">Logout</a>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <p>Total Tasks</p>
+                <h2 th:text="${totalTasks}">0</h2>
+            </div>
+            <div class="stat-box">
+                <p>Completed</p>
+                <h2 th:text="${completedTasks}">0</h2>
+            </div>
+            <div class="stat-box">
+                <p>Pending</p>
+                <h2 th:text="${pendingTasks}">0</h2>
+            </div>
+        </div>
+
+        <h3>Productivity</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" th:style="'width:' + ${productivity} + '%'"></div>
+        </div>
+
+        <form class="add-task" th:action="@{/dashboard/add}" method="post">
+            <input type="text" name="title" placeholder="What's your next goal?" required>
+            <select name="priority">
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+            </select>
+            <input type="date" name="dueDate" required>
+            <button type="submit">+</button>
+        </form>
+
+        <h3 class="section-title">My Tasks</h3>
+
+        <div th:if="${tasks.size() == 0}" class="empty">
+            No tasks yet. Start building momentum!
+        </div>
+
+        <div th:each="task : ${tasks}" class="task">
+
+            <form th:action="@{'/dashboard/complete/' + ${task.id}}" method="post">
+                <input type="checkbox" th:checked="${task.completed}" onchange="this.form.submit()">
+            </form>
+
+            <span class="task-title"
+                  th:classappend="${task.completed} ? 'done-text' : ''"
+                  th:text="${task.title}">
+            </span>
+
+            <span class="date" th:text="${task.dueDate}"></span>
+
+            <span class="badge"
+                  th:classappend="${task.completed} ? 'done' : ${task.priority.toLowerCase()}">
+                <span th:text="${task.completed ? 'Done' : task.priority}"></span>
+            </span>
+
+            <div class="actions">
+                <form th:action="@{'/dashboard/delete/' + ${task.id}}" method="post" 
+                      onsubmit="return confirm('Delete this task?')">
+                    <button type="submit" class="btn-delete">Delete</button>
+                </form>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+</body>
+</html>
+

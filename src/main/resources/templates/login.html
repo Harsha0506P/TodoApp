@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | TaskFlow</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="auth-bg">
+
+<div class="auth-container">
+    <div class="auth-card">
+
+        <div class="auth-header">
+            <h2>Login</h2>
+        </div>
+
+        <div class="auth-body">
+            <h3>Login</h3>
+            <p class="subtext">Welcome back! Please log in to your account.</p>
+
+            <p th:if="${error}" class="msg error">Invalid email or password</p>
+            <p th:if="${success}" class="msg success">Registration successful. Please login.</p>
+
+            <form method="post" action="/login">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter your email" required>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit" class="btn-primary">Log In</button>
+            </form>
+
+            <p class="switch">
+                Don't have an account?
+                <a href="/register">Register</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
